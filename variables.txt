@@ -1,0 +1,102 @@
+variable "vsphere_user" {
+  description = "Username for vSphere authentication"
+  type        = string
+}
+
+variable "vsphere_password" {
+  description = "Password for vSphere authentication"
+  type        = string
+}
+
+variable "vsphere_server" {
+  description = "vSphere server address"
+  type        = string
+}
+
+variable "vm_name" {
+  description = "Name of the virtual machine"
+  type        = string
+}
+
+variable "resource_pool_name" {
+  description = "Name of the resource pool"
+  type        = string
+}
+
+variable "datacenter_name" {
+  description = "Name of the vSphere datacenter"
+  type        = string
+}
+
+variable "network_name" {
+  description = "Name of the vSphere network"
+  type        = string
+}
+
+variable "template_uuid" {
+  description = "UUID of the VM template to clone"
+  type        = string
+}
+
+variable "vm_folder" {
+  description = "Name of the folder where the VM will be created"
+  type        = string
+}
+
+variable "num_cpus" {
+  description = "Number of CPUs allocated to the VM"
+  type        = number
+}
+
+variable "memory" {
+  description = "Amount of memory allocated to the VM (in MB)"
+  type        = number
+}
+
+variable "disk_size" {
+  description = "Size of the VM disk (in GB)"
+  type        = number
+}
+
+variable "eagerly_scrub" {
+  description = "Flag to enable/disable disk scrubbing"
+  type        = bool
+}
+
+variable "thin_provisioned" {
+  description = "Flag to enable/disable thin provisioning"
+  type        = bool
+}
+
+variable "adapter_type" {
+  description = "Type of network adapter for the VM"
+  type        = string
+}
+
+variable "use_static_mac" {
+  description = "Flag to enable/disable static MAC address for the network adapter"
+  type        = bool
+}
+
+variable "env_id" {
+  description = "Name of the custom attribute for environment ID"
+  type        = string
+}
+
+variable "service_type" {
+  description = "Name of the custom attribute for service type"
+  type        = string
+}
+
+variable "datastore" {
+  description = "Name of the vSphere datastore"
+  type        = string
+}
+
+variable "vms" {
+  description = "List of VM configurations"
+  type        = list(object({
+    hostname = string
+    template = string
+  }))
+}

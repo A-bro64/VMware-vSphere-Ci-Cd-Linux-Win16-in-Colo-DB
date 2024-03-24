@@ -1,0 +1,69 @@
+provider "vsphere" {
+  user           = var.vsphere_user
+  password       = var.vsphere_password
+  vsphere_server = var.vsphere_server
+}
+
+resource "vsphere_virtual_machine" "vm" {
+  name             = var.vm_name
+  resource_pool_id = data.vsphere_resource_pool.resource_pool.id
+  datastore_id     = data.vsphere_datastore.dc.id
+  folder           = var.vm_folder
+
+  clone {
+    template_uuid = var.template_uuid
+  }
+
+  disk {
+    label            = "disk0"
+    size             = var.disk_size
+    eagerly_scrub    = var.eagerly_scrub
+    thin_provisioned = var.thin_provisioned
+  }
+
+  network_interface {
+    label          = "network_interface"
+    network_id     = data.vsphere_network.network.id
+    adapter_type   = var.adapter_type
+    use_static_mac = var.use_static_mac
+  }
+
+  num_cpus = var.num_cpus
+  memory   = var.memory
+}
+
+data "vsphere_datacenter" "datacenter" {
+  name = var.datacenter_name
+}
+
+data "vsphere_resource_pool" "resource_pool" {
+  name          = var.resource_pool_name
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_network" "network" {
+  name          = var.network_name
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_virtual_machine" "template" {
+  for_each      = {
+    for vm in var.vms:
+    vm.hostname => vm
+  }
+  name          = each.value.template
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_custom_attribute" "env_id" {
+  name = var.env_id
+}
+
+data "vsphere_custom_attribute" "service_type" {
+  name = var.service_type
+}
+
+data "vsphere_datastore" "datastore" {
+  name          = var.datastore
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
